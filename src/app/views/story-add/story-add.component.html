@@ -1,0 +1,40 @@
+<section class="story">
+    <form [formGroup]="storyAddForm" class="story__form">
+        <h4 class="story__title">Add Story</h4>
+        <div class="row">
+            <div class="col-md-12 form_group">
+                <input type="text" formControlName="name" class="story__input" placeholder="Story name">
+                <div *ngIf="storyAddForm.controls['name'].invalid && (storyAddForm.controls['name'].dirty || storyAddForm.controls['name'].touched)"
+                    class="alert">
+                    <div *ngIf="storyAddForm.controls['name'].errors.required">
+                        Please enter Story name
+                    </div>
+                </div>
+
+                <div *ngIf="is_duplicated">Name is duplicated. Please change the name</div>
+            </div>
+            <div class="col-md-12 form_group">
+                <input type="number" formControlName="point" class="story__input" placeholder="Story Point">
+                <div *ngIf="storyAddForm.controls['point'].invalid && (storyAddForm.controls['point'].dirty || storyAddForm.controls['point'].touched)"
+                    class="alert">
+                    <div *ngIf="storyAddForm.controls['point'].errors.required">
+                        Please enter Story Point
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary story__button" (click)="addStory()">Add Story</button>
+            </div>
+
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary story__button" [routerLink]="['/update']">Update Stories</button>
+            </div>
+        </div>
+       
+    </form>
+
+    <div *ngIf="storyService.stories?.length > 0" class="story__table">
+        <app-story-list></app-story-list>
+    </div>
+</section>
+

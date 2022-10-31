@@ -1,0 +1,25 @@
+<section class="story">
+    <form class="story__form">
+        <div class="row">
+            <div class="col-md-12 form_group">
+                <input type="text" class="story__input" [(ngModel)]="target_point" [ngModelOptions]="{standalone:true}" placeholder="Story point">
+            </div>
+
+            <div class="col-md-12 mb-4">
+                <button type="button" class="btn btn-primary story__button" (click)="autoSelect()">Auto Select Stories</button>
+            </div>
+
+            <div class="col-md-12 mb-2">
+                <button type="button" class="btn btn-primary story__button" (click)="clearStories()">Clear Stories</button>
+            </div>
+            <div class="col-md-12 mb-2">
+                <button type="button" class="btn btn-primary story__button" (click)="removeSelectedData()">Clear Selected Stories</button>
+            </div>
+        </div>
+
+    </form>
+
+    <div *ngIf="storyService.stories?.length > 0" class="story__table">
+        <app-story-list></app-story-list>
+    </div>
+</section>
