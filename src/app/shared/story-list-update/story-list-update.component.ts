@@ -30,12 +30,13 @@ export class StoryListUpdateComponent implements OnInit {
   autoSelect() {
     let index = this.selectRandomOne()
 
-    if (index || index== 0) {
+    if ((index || index== 0 )&&  index !=undefined) {
       if (this.storyService.stories[index].point <= this.target_point) {
 
         this.selected_stories.push(this.storyService.stories[index])
         this.storyService.stories[index].checked = true
       } 
+
     }
     if (this.getSum() < this.target_point) {
       this.autoSelect()
@@ -44,18 +45,27 @@ export class StoryListUpdateComponent implements OnInit {
         let exes_point = this.getSum() - this.target_point
         if (this.selected_stories.some((x: { point: number; }) => x.point == exes_point)) {
           let index = this.selected_stories.findIndex((x: { point: number; }) => x.point == exes_point)
+          this.storyService.stories[index].checked=false
           this.selected_stories.splice(index, 1)
           return;
         } else {
-          this.selected_stories.splice(this.selected_stories.length - 1, 1)
           let index =this.storyService.stories.findIndex((x: { name: any; }) => x.name == this.selected_stories[this.selected_stories.length - 1].name)
           this.storyService.stories[index].checked=false
-        
+          this.selected_stories.splice(this.selected_stories.length - 1, 1)
           let balance = this.target_point - this.getSum()
-       
           let balncearray = this.storyService.stories.filter((x: { point: number; }) => x.point <= balance)
           balncearray = balncearray.sort((a: any, b: any) => a.point - b.point);
-          
+          if(balncearray.length > 0){
+            for(let i=0; i<balncearray.length; i++){
+              if(this.getSum() + balncearray[i].point <= this.target_point){
+                let index =this.storyService.stories.findIndex((x: { name: any; })=>x.name == balncearray[i].name)
+                this.storyService.stories[index].checked=true
+                this.selected_stories.push(balncearray[i])
+              }else{
+                return;
+              }
+            }
+          }
         }
 
       }
@@ -65,29 +75,11 @@ export class StoryListUpdateComponent implements OnInit {
     }
 
 
-
-    //  if(this.storyService.stories.length > 0){
-    //   if(this.target_point){
-    //   this.storyService.stories.forEach((element: any) => {
-
-
-
-    //     if(element.point == this.target_point){
-    //       element.checked=true
-    //     }else{
-    //       element.checked=false
-    //     }
-    //   });
-    // }else{
-    //   this.tosterService.showError("Please enter target value");
-    // }
-    //  }
+   
   }
 
 
-  //  autoSelectStories(){
 
-  //  }
 
 
 
@@ -107,7 +99,7 @@ export class StoryListUpdateComponent implements OnInit {
       return;
     }
     
-      return index ? index : 0;
+      return index;
     
   
   }
